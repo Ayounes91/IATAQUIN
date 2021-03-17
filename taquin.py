@@ -13,10 +13,11 @@ def afficher(taquin):
     print("__|___|__")
     print(taquin[6],"|",taquin[7],"|",taquin[8])
     print("__|___|__")
-def victoire(taquin,solution):
+def victoire(taquin,solution,i):
     if(taquin==solution):
         afficher(taquin)
         print("Félicitations !\n")
+        print("Partie remportée en",i,"coups")
         return True
 def jouer(taquin):
     afficher(taquin)
@@ -45,6 +46,7 @@ def jouer(taquin):
         print("Erreur de saisie.")
     
 chiffres = [1,2,3,4,5,6,7,8,"X"]
+i=0 #Compteur de coups joués
 c1 = random.choice(chiffres) #On génère les chiffres aléatoirement parmi ceux de la liste ci-dessus
 chiffres.remove(c1) #On retire les chiffres de la liste au fur et à mesure pour ne pas les générer à nouveau
 c2 = random.choice(chiffres)
@@ -64,6 +66,6 @@ chiffres.remove(c8)
 c0 = random.choice(chiffres)
 chiffres.remove(c0)
 taquin = [c1,c2,c3,c4,c5,c6,c7,c8,c0] #On constitue le taquin ainsi formé
-while(not(victoire(taquin,[1,2,3,4,5,6,7,8,"X"]))): #Tant qu'on ne résout pas le taquin
+while(not(victoire(taquin,[1,2,3,4,5,6,7,8,"X"],i))): #Tant qu'on ne résout pas le taquin
     jouer(taquin)                                   #Le jeu continue
-    
+    i = i+1
