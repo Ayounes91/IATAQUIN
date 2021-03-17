@@ -25,11 +25,17 @@ def jouer(taquin):
     print("Que voulez-vous faire ?")
     rep = input("Monter (8)|Descendre (2)|Gauche (4)|Droite (6) ")
     if(rep=="8"):
-        taquin[taquin.index("X")] = taquin[Xn-3] #Monter la case vide revient à la faire se déplacer 3 cases
-        taquin[Xn-3] = "X"                       #Vers l'arrière
+        if(Xn in [0,1,2]): #Si la case vide est sur le bord supérieur du taquin
+            print("Impossible de déplacer en haut.") #Impossible de la déplacer
+        else:        #Sinon
+            taquin[taquin.index("X")] = taquin[Xn-3] #Monter la case vide revient à la faire se déplacer 3 cases
+            taquin[Xn-3] = "X"                       #Vers l'arrière
     elif(rep=="2"):
-        taquin[taquin.index("X")] = taquin[Xn+3] #Descendre la case vide revient à la faire se déplacer 3 cases
-        taquin[Xn+3] = "X"                       #En avant
+        if(Xn in [6,7,8]): #Si la case vide est sur le bord inférieur du taquin
+            print("Impossible de déplacer en bas.") #Impossible de la déplacer
+        else:        #Sinon
+            taquin[taquin.index("X")] = taquin[Xn+3] #Descendre la case vide revient à la faire se déplacer 3 cases
+            taquin[Xn+3] = "X"                       #En avant
     elif(rep=="4"): #Pour aller à gauche
         if(Xn in [0,3,6]): #Si la case vide est sur le bord gauche du taquin
             print("Impossible de déplacer à gauche.") #Impossible de la déplacer
