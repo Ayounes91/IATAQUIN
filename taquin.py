@@ -13,17 +13,19 @@ def afficher(taquin):
     print("__|___|__")
     print(taquin[6],"|",taquin[7],"|",taquin[8])
     print("__|___|__")
-def victoire(taquin,solution,i):
+def victoire(taquin,solution,i,chemin):
     if(taquin==solution):
         afficher(taquin)
         print("Félicitations !\n")
         print("Partie remportée en",i,"coups")
+        print("Historique du chemin\n",chemin)
         return True
-def jouer(taquin):
+def jouer(taquin,chemin):
     afficher(taquin)
     Xn = taquin.index("X") #On stocke la position du X
     print("Que voulez-vous faire ?")
     rep = input("Monter (8)|Descendre (2)|Gauche (4)|Droite (6) ")
+    chemin.append(pathConv.get(int(rep)))
     if(rep=="8"):
         if(Xn in [0,1,2]): #Si la case vide est sur le bord supérieur du taquin
             print("Impossible de déplacer en haut.") #Impossible de la déplacer
@@ -50,28 +52,40 @@ def jouer(taquin):
             taquin[Xn+1] = "X"        
     else:
         print("Erreur de saisie.")
+
+pathConv ={
+    2:"Bas",
+    4:"Gauche",
+    6:"Droite",
+    8:"Haut"}
     
-chiffres = [1,2,3,4,5,6,7,8,"X"]
-i=0 #Compteur de coups joués
-c1 = random.choice(chiffres) #On génère les chiffres aléatoirement parmi ceux de la liste ci-dessus
-chiffres.remove(c1) #On retire les chiffres de la liste au fur et à mesure pour ne pas les générer à nouveau
-c2 = random.choice(chiffres)
-chiffres.remove(c2)
-c3 = random.choice(chiffres)
-chiffres.remove(c3)
-c4 = random.choice(chiffres)
-chiffres.remove(c4)
-c5 = random.choice(chiffres)
-chiffres.remove(c5)
-c6 = random.choice(chiffres)
-chiffres.remove(c6)
-c7 = random.choice(chiffres)
-chiffres.remove(c7)
-c8 = random.choice(chiffres)
-chiffres.remove(c8)
-c0 = random.choice(chiffres)
-chiffres.remove(c0)
-taquin = [c1,c2,c3,c4,c5,c6,c7,c8,c0] #On constitue le taquin ainsi formé
-while(not(victoire(taquin,[1,2,3,4,5,6,7,8,"X"],i))): #Tant qu'on ne résout pas le taquin
-    jouer(taquin)                                   #Le jeu continue
-    i = i+1
+def generer():
+    chiffres = [1,2,3,4,5,6,7,8,"X"]
+    c1 = random.choice(chiffres) #On génère les chiffres aléatoirement parmi ceux de la liste ci-dessus
+    chiffres.remove(c1) #On retire les chiffres de la liste au fur et à mesure pour ne pas les générer à nouveau
+    c2 = random.choice(chiffres)
+    chiffres.remove(c2)
+    c3 = random.choice(chiffres)
+    chiffres.remove(c3)
+    c4 = random.choice(chiffres)
+    chiffres.remove(c4)
+    c5 = random.choice(chiffres)
+    chiffres.remove(c5)
+    c6 = random.choice(chiffres)
+    chiffres.remove(c6)
+    c7 = random.choice(chiffres)
+    chiffres.remove(c7)
+    c8 = random.choice(chiffres)
+    chiffres.remove(c8)
+    c0 = random.choice(chiffres)
+    chiffres.remove(c0)
+    return [c1,c2,c3,c4,c5,c6,c7,c8,c0] #On constitue le taquin ainsi formé
+
+def main():
+    taquin = generer()
+    i=0 #Compteur de coups joués
+    chemin=[]
+    while(not(victoire(taquin,[1,2,3,4,5,6,7,8,"X"],i,chemin))): #Tant qu'on ne résout pas le taquin
+        jouer(taquin,chemin)                                   #Le jeu continue
+        i = i+1
+        
