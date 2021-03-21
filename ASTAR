@@ -1,0 +1,69 @@
+def AStar(self,i__vertex_init_label, i__vertex_target_label):
+		"""
+		visit http://en.wikipedia.org/wiki/A*_search_algorithm for more information
+		"""
+		print 'A* : %s --> %s'%(i__vertex_init_label,i__vertex_target_label)
+
+		l__vertexTarget = self.getVertexByLabel(i__vertex_target_label) # get the target
+		l__vertexInit   = self.getVertexByLabel(i__vertex_init_label)   # get the source
+
+		if l__vertexTarget!= None:
+			# -- initialisation --
+			l__closedset = []              # The set of nodes already evaluated.
+			l__openset   = [l__vertexInit] # The set of tentative nodes to be evaluated.
+			l__came_from = {}              # The map of navigated nodes.
+			# discrete functions definition
+			l__g_score, l__h_score, l__f_score = {}, {}, {}
+			l__g_score[i__vertex_init_label] = 0                                                # g(x) = past-cost function
+			l__h_score[i__vertex_init_label] = l__vertexInit.m__AstarHeuristicEstimateDistance  # h(x) = heuristic function
+			l__f_score[i__vertex_init_label] = l__h_score[i__vertex_init_label]                 # f(x) = g(x) + h(x) = distance-plus-cost- heuristic function
+			# -- end of innitialisation --
+			
+			while len(l__openset)>0:
+				
+				# -- choose the node in openset having the lowest f_score[] (estimated total distance) value --
+				l__min, i, l__index = 999999999, 0, 0
+				for l__vertex in l__openset:
+					if l__f_score[l__vertex.m__label]<l__min:
+						l__min = l__f_score[l__vertex.m__label]
+						l__index = i
+					i+=1
+
+				l__current_vertex = l__openset.pop(l__index)
+				del i, l__index
+				# -- end of choice --
+				
+				print 'I choose \'%s\' vertex with f_score=%d.'%(l__current_vertex.m__label,l__min)
+				del l__min
+				
+				if l__current_vertex.m__label == i__vertex_target_label:
+					# if we are on the target > end of the process
+					# and reconstruct the path to print it
+					print self.reconstruct_path(l__came_from,l__came_from[i__vertex_target_label]) + ' >> %s (score = %d)'%(i__vertex_target_label,l__g_score[i__vertex_target_label])
+					return '__ END __'
+				l__closedset.append(l__current_vertex) # current node is visited 
+				l__successors = self.getSuccessors(l__current_vertex.m__number,C__MUTE) # get all successors
+
+				for l__successor in l__successors:
+					if l__successor.isInArray(l__closedset): # nothing to do, it is already visited
+						continue
+					l__current_edge = self.getEdge(l__current_vertex.m__number, l__successor.m__number,C__MUTE) # getting corresponding edge "current node"-->"successor"
+					l__tentative_g_score = l__g_score[l__current_vertex.m__label] + l__current_edge.m__weight
+					if not l__successor.isInArray(l__openset):
+						l__openset.append(l__successor) # adding the successor to the openset to visit it later
+						l__tentative_is_better = True   # it is the first tentative for this node
+					elif l__tentative_g_score < l__g_score[l__successor.m__label]:
+						l__tentative_is_better = True
+					else:
+						l__tentative_is_better = False
+					if l__tentative_is_better:
+						# update the functions dictionnaries if the tentative is better
+						l__came_from[l__successor.m__label] = l__current_vertex
+						l__g_score[l__successor.m__label]   = l__tentative_g_score
+						l__h_score[l__successor.m__label]   = l__successor.m__AstarHeuristicEstimateDistance
+						l__f_score[l__successor.m__label]   = l__g_score[l__successor.m__label] + l__h_score[l__successor.m__label]
+			return 'Target is not reachable'
+				
+		else:	
+
+			print 'Target does not exist'
