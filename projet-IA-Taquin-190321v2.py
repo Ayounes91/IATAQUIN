@@ -3,9 +3,9 @@ import copy
 from random import randint
 import time
 
-###############################################################################
-# CONSTANTES                                                                  #
-###############################################################################
+
+# CONSTANTES
+
 
 POIDS = ((36, 12, 12, 4, 1, 1, 4, 1, 0),  # pi1
          (8, 7, 6, 5, 4, 3, 2, 1, 0),  # pi2 = pi3
@@ -14,10 +14,10 @@ POIDS = ((36, 12, 12, 4, 1, 1, 4, 1, 0),  # pi1
 
 COEFF = (4, 1)
 
-TAILLE_TAQUIN = 3 # ................
-###############################################################################
-# CLASSES ET METHODES                                                         #
-###############################################################################
+
+
+# CLASSES ET METHODES
+
 
 class Taquin:
     """Liste des attributs
@@ -46,20 +46,20 @@ class Taquin:
                 liste.append(self.etat[i, c])
             print(liste)
 
-    def est_solution(self):
-        """Renvoie True si le taquin est résolu."""
+    def victoire(self):
+        #Renvoie True si le taquin est résolu.
         return self.etat == Taquin(self.taille).etat
 
     def chercher(self, e):
-        """Retourne les coordonnées de la case e"""
+        #Retourne les coordonnées de la case e
         for i in range(self.taille):
             for j in range(self.taille):
                 if self.etat[(i, j)] == e:
                     return (i, j)
 
     def bouger(self, direction):
-        """Déplace le trou dans l'une des directions Nord, Sud, Est, Ouest,
-        et renvoie le taquin résultant avec le chemin et le cout mis à jour."""
+        #Déplace le trou dans l'une des directions et renvoi le chemin
+
         copietaquin = copy.deepcopy(self)
         trou = self.chercher(len(self.etat) - 1)
         if direction == "N":
@@ -86,8 +86,7 @@ class Taquin:
         return copietaquin
 
     def melanger_taquin(self):
-        """Prend un taquin résolu et le mélange avec un grand nombre de
-        mouvements aléatoires. On est sûr qu'il est résolvable en faisant ça."""
+        #Prend un taquin aleatoire et le melange
         trou = list(self.chercher(len(self.etat) - 1))
 
         for i in range(10000):
@@ -190,46 +189,46 @@ class Taquin:
         return self
 
     def expanser(self):
-        """Renvoie une liste des états accessibles à partir de l'état actuel."""
+        #Renvoie une liste des états accessibles à partir de l'état actuel
 
         trou = self.chercher(len(self.etat) - 1)
 
-        trouHaut = (trou[0] == 0)
-        trouBas = (trou[0] == self.taille - 1)
-        trouGauche = (trou[1] == 0)
-        trouDroite = (trou[1] == self.taille - 1)
-        trouHG = trouHaut and trouGauche
-        trouHD = trouHaut and trouDroite
-        trouBG = trouBas and trouGauche
-        trouBD = trouBas and trouDroite
+        trouN = (trou[0] == 0)
+        trouS = (trou[0] == self.taille - 1)
+        trouO = (trou[1] == 0)
+        trouE = (trou[1] == self.taille - 1)
+        trouNO = trouN and trouO
+        trouNE = trouN and trouE
+        trouSO = trouS and trouO
+        trouSE = trouS and trouE
 
         eNord, eSud, eOuest, eEst = None, None, None, None
 
-        if trouHG:
+        if trouNO:
             eEst = self.bouger("E")
             eSud = self.bouger("S")
-        elif trouHD:
+        elif trouNE:
             eOuest = self.bouger("O")
             eSud = self.bouger("S")
-        elif trouBG:
+        elif trouSO:
             eNord = self.bouger("N")
             eEst = self.bouger("E")
-        elif trouBD:
+        elif trouSE:
             eNord = self.bouger("N")
             eOuest = self.bouger("O")
-        elif trouHaut:
+        elif trouN:
             eEst = self.bouger("E")
             eSud = self.bouger("S")
             eOuest = self.bouger("O")
-        elif trouBas:
+        elif trouS:
             eNord = self.bouger("N")
             eEst = self.bouger("E")
             eOuest = self.bouger("O")
-        elif trouGauche:
+        elif trouO:
             eNord = self.bouger("N")
             eSud = self.bouger("S")
             eEst = self.bouger("E")
-        elif trouDroite:
+        elif trouE:
             eNord = self.bouger("N")
             eSud = self.bouger("S")
             eOuest = self.bouger("O")
@@ -252,8 +251,8 @@ class Taquin:
             + abs(position_actuelle[1] - position_voulue[1])
         return d
 
-    def manhattan(self, k):
-        """Calcule la distance Manhattan avec POIDS[k] et COEFF[k].
+    def dist_manhattan(self, k):
+        """Calcul de la distance Manhattan avec les POIDS[k] et les COEFF[k].
         Fonction intermédiaire pour la fonction d'évaluation f."""
         elem = [self.dist_elem(i) for i in range(len(self.etat))]
         elem = tuple(elem)
@@ -266,17 +265,17 @@ class Taquin:
                        for i in range(len(self.etat))) / COEFF[k % 2]
 
     def calculer_f(self, k):
-        return self.cout + self.manhattan(k)
+        return self.cout + self.dist_manhattan(k)
 
 
 class Frontiere:
-    """Liste d'états triés selon leur valeur de f (ordre croissant)."""
+    #Liste d'états triés selon leur valeur de f (ordre croissant)
 
     def __init__(self):
         self.etats = []
 
     def ajouter(self, e):
-        """Ajoute e à la bonne position en fonction de sa valeur de f."""
+        #Ajoute e à la bonne position en fonction de sa valeur de f
         if self.etats == []:
             self.etats.insert(0, e)
         else:
@@ -289,8 +288,8 @@ class Frontiere:
                 self.etats.insert(len(self.etats), e)
 
 
-class DejaExplores:
-    """Arbre binaire contenant les états déjà explorés"""
+class Etatsexplores:
+    #Arbre binaire de recherche qui contient les états explorés
 
     def __init__(self):
         self.etats = []
@@ -305,46 +304,46 @@ class DejaExplores:
         return False
 
 
-###############################################################################
-# ALGORITHME A*                                                               #
-###############################################################################
+
+# ALGORITHME A*
+
 
 def main():
     # Initialisation =====================================================
-    t = Taquin(int(TAILLE_TAQUIN))
-    pond = int(input("Pondération pour les distances de Manhattan (0 à 5) : ")) #:  retire commentaire
+    t = Taquin(3)
+    ponderation = int(input("Pondération pour les distances de Manhattan (0 à 5) : "))
     t.afficher()
 
     t = t.melanger_taquin()  # pour avoir un taquin non résolu
 
     frontiere = Frontiere()
     frontiere.ajouter(t)
-    historique = DejaExplores()  # crée l'ensemble des états déjà explorés
+    memoire = Etatsexplores()  # crée l'ensemble des états déjà explorés
 
-    if t.est_solution():
+    if t.victoire():
         print("Le taquin est déjà solution.")
         return ""
 
     start_time = time.time()
     # Boucle principale =================================================
-    while not t.est_solution():
+    while not t.victoire():
 
         if len(frontiere.etats) == 0:
             return "Frontière vide : pas de solution"
 
         t = frontiere.etats.pop(0)
-        if t.est_solution():
+        if t.victoire():
             print("recherche terminée en %s secondes" % (time.time() - start_time))
             print("solution : " + str(t.chemin))
 
-            print(str(len(historique.etats)) + " états explorés")
+            print(str(len(memoire.etats)) + " états explorés")
 
         expansion = t.expanser()  # On récupère une liste des états accessibles
-        historique.ajouter(t)
+        memoire.ajouter(t)
         for i in range(len(expansion)):
             if not expansion[i] == None:
-                expansion[i].f = expansion[i].calculer_f(pond)
-                if not historique.contient(expansion[i]):
+                expansion[i].f = expansion[i].calculer_f(ponderation)
+                if not memoire.contient(expansion[i]):
                     frontiere.ajouter(expansion[i])
         print("Etape suivante : ")
         t.afficher()
