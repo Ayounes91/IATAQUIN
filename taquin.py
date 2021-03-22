@@ -131,23 +131,23 @@ rho2=1
 rho4=rho2
 rho6=rho2
 coeff=[rho1,rho2,rho3,rho4,rho5,rho6]
-"""def manhattan(taquin,poids):
+def manhattan(taquin,poids):
     h=[]
     
-    for k in range(0,5):
+    for k in range(0,6):
         j=0
         for i in range(0,8):
-             j = j+(poids[k[i]]*distElem(taquin)[i])
+             j = j+(poids[k][i]*distElem(taquin)[i])
         j= j//coeff[k]
         h.append(j)
     print(h)
-   """         
+            
 def main():
     taquin = melanger()
     i=0 #Compteur de coups joués
     chemin=[]
     while(not(victoire(taquin,[1,2,3,4,5,6,7,8,"X"],i,chemin))): #Tant qu'on ne résout pas le taquin
         jouer(taquin,chemin)                                   #Le jeu continue
-        #manhattan(taquin,poids)
+        manhattan(taquin,poids)
         i = i+1
         
