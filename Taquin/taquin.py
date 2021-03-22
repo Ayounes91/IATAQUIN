@@ -22,6 +22,7 @@ def victoire(taquin,solution,i,chemin):
         print("Partie remportée en",i,"coups")
         print("Historique du chemin\n",chemin)
         return True
+    
 def jouer(taquin,chemin):
     afficher(taquin)
     Xn = taquin.index("X") #On stocke la position du X
