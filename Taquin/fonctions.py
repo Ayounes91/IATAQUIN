@@ -102,6 +102,7 @@ def trouBas(a):
        a[Xn] = a[Xn+3]
        a[Xn+3] = "X"
     return a
+
 def nxtState(a):
     
     Xn = a.index("X")
