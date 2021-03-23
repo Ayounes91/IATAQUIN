@@ -24,17 +24,18 @@ rho4=rho2
 rho6=rho2
 coeff=[rho1,rho2,rho3,rho4,rho5,rho6]
 
+
 def distElem(a):
-    x1 = a.index("1")
-    x2 = a.index("2")
-    x3 = a.index("3")
-    x4 = a.index("4")
-    x5 = a.index("5")
-    x6 = a.index("6")
-    x7 = a.index("7")
-    x8 = a.index("8")
+    x1 = a.index(1)
+    x2 = a.index(2)
+    x3 = a.index(3)
+    x4 = a.index(4)
+    x5 = a.index(5)
+    x6 = a.index(6)
+    x7 = a.index(7)
+    x8 = a.index(8)
     xn = a.index("X")
-    d1 = abs(x1-0) # abs = valeur absolue
+    d1 = abs(x1-0) #abs = valeur absolue
     d2 = abs(x2-1)
     d3 = abs(x3-2)
     d4 = abs(x4-3)
@@ -42,19 +43,16 @@ def distElem(a):
     d6 = abs(x6-5)
     d7 = abs(x7-6)
     d8 = abs(x8-7)
-    dx = abs(xn-8)
-    return [d1,d2,d3,d4,d5,d6,d7,d8,dx]
+    dn = abs(xn-8)
+    return [d1,d2,d3,d4,d5,d6,d7,d8,dn]
 
-def etatsExplores(memoire,a):
-    etatsExplores = []
-    for k in etatsExplores:
-        if(k==a):
-            return False
-            #Cet état a déjà été visité.
-            break
-        else:
-            etatsExplores.append(a)
-    return etatsExplores
+def etatsExplores(a):
+    
+    for k in memoire:
+        if(not(k==a)):
+           
+            memoire.append(a)
+    
         
    
     
@@ -68,7 +66,6 @@ def heuristique(a):
         j= j//coeff[k]
         h.append(j)
     return h
-
 def fctEval(a):
     g=sum(distElem(a))
     h= heuristique(a)[5] #manhattan
@@ -77,171 +74,67 @@ def fctEval(a):
 
 def trouGauche(a):
     Xn = a.index("X")
-    if(not(Xn in [0,3,6])):
+    if(Xn not in [0,3,6]):
        a[Xn] = a[Xn-1]
        a[Xn-1] = "X"
     return a
-
 def trouDroit(a):
     Xn = a.index("X")
-    if(not(Xn in [2,5,8])):
+    if(Xn not in [2,5,8]):
        a[Xn] = a[Xn+1]
        a[Xn+1] = "X"
     return a
-
 def trouHaut(a):
     Xn = a.index("X")
-    if(not(Xn in [0,1,2])):
+    if(Xn not in [0,1,2]):
        a[Xn] = a[Xn-3]
        a[Xn-3] = "X"
     return a
-
 def trouBas(a):
     Xn = a.index("X")
-    if(not(Xn in [6,7,8])):
+    if(Xn not in [6,7,8]):
        a[Xn] = a[Xn+3]
        a[Xn+3] = "X"
     return a
-
-def nxtState(a):
     
-    Xn = a.index("X")
-    if(Xn==0):
-        r1 = trouDroit(a)
-        r2 = trouBas(a)
-        nxtState = [r1,r2]
-        for k in nxtState:
-            if etatsExplores(k,memoire)==False:
-                nxtState.delete(k)
-        evalState = []
-        for k in nxtState:
-            evalState.append(fctEval(k))
-        for k in nxtState:
-            if fctEval(k)==min(evalState):
-                return k
-    if(Xn==1):
-        r1 = trouDroit(a)
-        r2 = trouBas(a)
-        r3 = trouGauche(a)
-        nxtState = [r1,r2,r3]
-        evalState = []
-        for k in nxtState:
-            if etatsExplores(k,memoire)==False:
-                nxtState.delete(k)
-        for k in nxtState:
-            evalState.append(fctEval(k))
-        for k in nxtState:
-            if fctEval(k)==min(evalState):
-                return k     
-    if(Xn==2):
-        r1 = trouGauche(a)
-        r2 = trouBas(a)
-        nxtState = [r1,r2]
-        evalState = []
-        for k in nxtState:
-            if etatsExplores(k,memoire)==False:
-                nxtState.delete(k)
-        for k in nxtState:
-            evalState.append(fctEval(k))
-        for k in nxtState:
-            if fctEval(k)==min(evalState):
-                return k
-    if(Xn==3):
-        r1 = trouDroit(a)
-        r2 = trouBas(a)
-        r3 = trouHaut(a)
-        nxtState = [r1,r2,r3]
-        evalState = []
-        for k in nxtState:
-            if etatsExplores(k,memoire)==False:
-                nxtState.delete(k)
-        for k in nxtState:
-            evalState.append(fctEval(k))
-        for k in nxtState:
-            if fctEval(k)==min(evalState):
-                return k 
-    if(Xn==4):
-        r1 = trouDroit(a)
-        r2 = trouBas(a)
-        r3 = trouHaut(a)
-        r4 = trouGauche(a)
-        nxtState = [r1,r2,r3,r4]
-        evalState = []
-        for k in nxtState:
-            if etatsExplores(k,memoire)==False:
-                nxtState.delete(k)
-        for k in nxtState:
-            evalState.append(fctEval(k))
-        for k in nxtState:
-            if fctEval(k)==min(evalState):
-                return k
-    if(Xn==5):
-        r1 = trouGauche(a)
-        r2 = trouBas(a)
-        r3 = trouHaut(a)
-        nxtState = [r1,r2,r3]
-        evalState = []
-        for k in nxtState:
-            if etatsExplores(k,memoire)==False:
-                nxtState.delete(k)
-        for k in nxtState:
-            evalState.append(fctEval(k))
-        for k in nxtState:
-            if fctEval(k)==min(evalState):
-                return k  
-    if(Xn==6):
-        r1 = trouDroit(a)
-        r2 = trouHaut(a)
-        nxtState = [r1,r2]
-        evalState = []
-        for k in nxtState:
-            if etatsExplores(k,memoire)==False:
-                nxtState.delete(k)
-        for k in nxtState:
-            evalState.append(fctEval(k))
-        for k in nxtState:
-            if fctEval(k)==min(evalState):
-                return k 
-    if(Xn==7):
-        r1 = trouDroit(a)
-        r2 = trouGauche(a)
-        r3 = trouHaut(a)
-        nxtState = [r1,r2,r3]
-        evalState = []
-        for k in nxtState:
-            if etatsExplores(k,memoire)==False:
-                nxtState.delete(k)
-        for k in nxtState:
-            evalState.append(fctEval(k))
-        for k in nxtState:
-            if fctEval(k)==min(evalState):
-                return k
-    if(Xn==8):
-        r1 = trouGauche(a)
-        r2 = trouHaut(a)
-        nxtState = [r1,r2]
-        evalState = []
-        for k in nxtState:
-            if etatsExplores(k,memoire)==False:
-                nxtState.delete(k)
-        for k in nxtState:
-            evalState.append(fctEval(k))
-        for k in nxtState:
-            if fctEval(k)==min(evalState):
-                return k
-    
-
+def nextState(a):
+    r1 = trouGauche(a)
+    r2 = trouDroit(a)
+    r3 = trouHaut(a)
+    r4 = trouBas(a)
+    states = [r1,r2,r3,r4]
+    evalStates = []
+    for k in states:
+        if k in memoire:
+            states.remove(k)
+        else:
+            etatsExplores(k)
+            evalStates.append(fctEval(k))
+    if(min(evalStates)==fctEval(trouGauche(a))):
+        return trouGauche(a)
+    elif(min(evalStates)==fctEval(trouDroit(a))):
+        return trouDroit(a)
+    elif(min(evalStates)==fctEval(trouHaut(a))):
+        return trouHaut(a)
+    elif(min(evalStates)==fctEval(trouBas(a))):
+        return trouBas(a)
+        
 memoire = []
-
+taq = []
 def auto():
     taq = taquin.melanger()
     i=0 #Compteur de coups joués
     chemin=[]
-    
     while(not(taquin.victoire(taq,[1,2,3,4,5,6,7,8,"X"],i,chemin))):
-        taq = nxtState(taq)
+        taq = nextState(taq)
         taquin.afficher(taq)
+        print(fctEval(trouGauche(taq)))
+        print(fctEval(trouDroit(taq)))
+        print(fctEval(trouHaut(taq)))
+        print(fctEval(trouGauche(taq)))
         i = i+1
+       
+
         
         
         
