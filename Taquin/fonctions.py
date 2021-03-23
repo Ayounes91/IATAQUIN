@@ -68,6 +68,7 @@ def heuristique(a):
         j= j//coeff[k]
         h.append(j)
     return h
+
 def fctEval(a):
     g=sum(distElem(a))
     h= heuristique(a)[5] #manhattan
@@ -80,18 +81,21 @@ def trouGauche(a):
        a[Xn] = a[Xn-1]
        a[Xn-1] = "X"
     return a
+
 def trouDroit(a):
     Xn = a.index("X")
     if(not(Xn in [2,5,8])):
        a[Xn] = a[Xn+1]
        a[Xn+1] = "X"
     return a
+
 def trouHaut(a):
     Xn = a.index("X")
     if(not(Xn in [0,1,2])):
        a[Xn] = a[Xn-3]
        a[Xn-3] = "X"
     return a
+
 def trouBas(a):
     Xn = a.index("X")
     if(not(Xn in [6,7,8])):
